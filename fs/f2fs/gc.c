@@ -1891,21 +1891,11 @@ freed:
 		if (gc_type == FG_GC &&
 				get_valid_blocks(sbi, segno, false) == 0)
 			seg_freed++;
-#ifdef CONFIG_F2FS_BD_STAT
-		bd_lock(sbi);
-		if (gc_type == BG_GC || get_valid_blocks(sbi, segno, 1) == 0) {
-			if (type == SUM_TYPE_NODE)
-				bd_inc_array_val(sbi, gc_node_segments, gc_type, 1);
-			else
-				bd_inc_array_val(sbi, gc_data_segments, gc_type, 1);
-			bd_inc_array_val(sbi, hotcold_gc_segments, hc_type + 1, 1);
-		}
-		bd_inc_array_val(sbi, hotcold_gc_blocks, hc_type + 1,
-					(unsigned long)get_valid_blocks(sbi, segno, 1));
-		bd_unlock(sbi);
-#endif
-		if (__is_large_section(sbi) && segno + 1 < end_segno)
-			sbi->next_victim_seg[gc_type] = segno + 1;
+
+		if (__is_large_section(sbi))
+			sbi->next_victim_seg[gc_type] =
+				(segno + 1 < end_segno) ? segno + 1 : NULL_SEGNO;
+
 skip:
 		f2fs_put_page(sum_page, 0);
 	}
