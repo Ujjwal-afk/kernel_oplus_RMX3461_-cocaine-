@@ -12,7 +12,7 @@
 
 #include <linux/stringify.h>
 
-<<<<<<< HEAD
+
 #ifdef CONFIG_ARM64_LSE_ATOMICS
 #define __LL_SC_FALLBACK(asm_ops)					\
 "	b	3f\n"							\
@@ -26,8 +26,6 @@ asm_ops "\n"								\
 #define __LL_SC_FALLBACK(asm_ops) asm_ops
 #endif
 
-=======
->>>>>>> ecdd65051b17 (arm64: atomics: remove LL/SC trampolines)
 #ifndef CONFIG_CC_HAS_K_CONSTRAINT
 #define K
 #endif
