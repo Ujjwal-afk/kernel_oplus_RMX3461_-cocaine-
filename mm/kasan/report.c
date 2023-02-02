@@ -92,6 +92,7 @@ static void end_report(unsigned long *flags)
 	pr_err("==================================================================\n");
 	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
 	spin_unlock_irqrestore(&report_lock, *flags);
+<<<<<<< HEAD
 
 #ifdef CONFIG_QGKI
 	//BSP.Kernel.Stability, kasan load enforce BUG
@@ -101,6 +102,10 @@ static void end_report(unsigned long *flags)
 
 		panic("panic_on_warn set ...\n");
 #endif
+=======
+	if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
+		check_panic_on_warn("KASAN");
+>>>>>>> 51538bdde3c2 (panic: Consolidate open-coded panic_on_warn checks)
 	kasan_enable_current();
 }
 
