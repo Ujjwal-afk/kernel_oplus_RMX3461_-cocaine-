@@ -120,6 +120,7 @@ static int net_assign_generic(struct net *net, unsigned int id, void *data)
 
 static int ops_init(const struct pernet_operations *ops, struct net *net)
 {
+    struct net_generic *ng;
 	int err = -ENOMEM;
 	void *data = NULL;
 
