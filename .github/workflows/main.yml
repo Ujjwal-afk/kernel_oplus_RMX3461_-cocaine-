@@ -1,12 +1,7 @@
 name: Build Kernel
 
 on:
-  push:
-    branches:
-      - HEAD
-  pull_request:
-    branches:
-      - HEAD
+workflow_dispatch:
 
 jobs:
   build:
