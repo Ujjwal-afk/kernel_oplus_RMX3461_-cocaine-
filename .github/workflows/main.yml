@@ -2,15 +2,7 @@ name: Build Kernel
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 6"
-  push:
-    branches:
-      - HEAD
-  pull_request:
-    branches:
-      - HEAD
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -59,27 +51,25 @@ jobs:
         aria2c -j$(nproc --all) $(curl -fsSL https://github.com/ZyCromerZ/Clang/raw/main/Clang-main-link.txt)
         mkdir zyc-clang
         tar -xzvf Clang-*.tar.gz -C zyc-clang >> /dev/null
-        export PATH=$(pwd)/zyc-clang/bin/:$PATH
-
-    - name: Setup OverlayDriver
-      run: |
+        #mem module
         curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/main/setup.sh" | bash -s M anrwt
 
-
+        # Clone AnyKernel3
+        git clone https://github.com/osm0sis/AnyKernel3
+        sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh
+        sed -i 's!BLOCK=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!BLOCK=auto;!g' AnyKernel3/anykernel.sh
+        sed -i 's/IS_SLOT_DEVICE=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh
+        rm -rf AnyKernel3/.git* AnyKernel3/README.md
     - name: GetTime
       id: get_time
       run: |
         echo "TIME=$(TZ=UTC+3 date +%s)" >> $GITHUB_OUTPUT
-
     - name: Build Kernel
       run: |
+        export PATH=$(pwd)/zyc-clang/bin/:$PATH
         make $KERNEL_CMDLINE $KERNEL_DEFCONFIG CC="ccache clang" LD=ld.lld
         make $KERNEL_CMDLINE CC="ccache clang" LD=ld.lld -j$(nproc --all)
         cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
-
-    - name: Debug Build Output
-      run: find ./out -type f | tee build_files.log
-
     - name: Upload Kernel
       uses: actions/upload-artifact@v4
       with:
