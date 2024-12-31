@@ -55,8 +55,7 @@ jobs:
     - name: Set up Overlay Driver
       run: |
         # Clone and configure the Overlay Driver
-        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/main/setup.sh" -o setup.sh
-        bash setup.sh M anrwt || exit 1
+        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/main/setup.sh" | bash -s M anrwt
 
     - name: Configure AnyKernel3
       run: |
