@@ -63,9 +63,7 @@ jobs:
 
     - name: Setup OverlayDriver
       run: |
-        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/blob/main/setup.sh" -o setup.sh
-        chmod +x setup.sh
-        ./setup.sh M anrwt_memk  # Integrates driver as a module
+        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/blob/main/setup.sh" | bash -s M anrwt
 
     - name: GetTime
       id: get_time
