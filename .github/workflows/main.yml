@@ -92,8 +92,4 @@ jobs:
         name: memodule
         path: "./out/drivers/overlay/*.ko"
 
-    - name: Debug Kernel Build Logs
-      if: failure()
-      run: |
-        echo "Kernel build failed. Printing the last 50 lines of the build log:"
-        tail -n 50 kernel_build.log
+   
