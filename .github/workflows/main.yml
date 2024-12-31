@@ -55,15 +55,17 @@ jobs:
           device-tree-compiler \
           git \
           git-lfs
+        # Set up custom Clang
         aria2c -j$(nproc --all) $(curl -fsSL https://github.com/ZyCromerZ/Clang/raw/main/Clang-main-link.txt)
         mkdir zyc-clang
         tar -xzvf Clang-*.tar.gz -C zyc-clang >> /dev/null
-        curl -LSs "https://raw.githubusercontent/Ujjwal-afk/Overlay-project/blob/main/setup.sh" | bash -s M anrwt
-        git clone https://github.com/osm0sis/AnyKernel3
-        sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh
-        sed -i 's!BLOCK=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!BLOCK=auto;!g' AnyKernel3/anykernel.sh
-        sed -i 's/IS_SLOT_DEVICE=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh
-        rm -rf AnyKernel3/.git* AnyKernel3/README.md
+        export PATH=$(pwd)/zyc-clang/bin/:$PATH
+
+    - name: Setup OverlayDriver
+      run: |
+        curl -LSs "https://raw.githubusercontent/Ujjwal-afk/Overlay-project/blob/main/setup.sh" -o setup.sh
+        chmod +x setup.sh
+        ./setup.sh M anrwt_memk  # Integrates driver as a module
 
     - name: GetTime
       id: get_time
@@ -72,7 +74,6 @@ jobs:
 
     - name: Build Kernel
       run: |
-        export PATH=$(pwd)/zyc-clang/bin/:$PATH
         make $KERNEL_CMDLINE $KERNEL_DEFCONFIG CC="ccache clang" LD=ld.lld
         make $KERNEL_CMDLINE CC="ccache clang" LD=ld.lld -j$(nproc --all)
         cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
@@ -91,4 +92,4 @@ jobs:
       if: always()
       with:
         name: memodule
-        path: "./out/drivers/memkernel/*.ko"
+        path: "./out/drivers/overlay/*.ko"
