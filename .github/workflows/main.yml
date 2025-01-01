@@ -76,8 +76,8 @@ jobs:
         path: "AnyKernel3/*"
 
     - name: Upload mem module
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4https://github.com/Ujjwal-afk/kernel_oplus_RMX3461_-cocaine-/edit/ice/.github/workflows/main.yml
       if: always()
       with:
         name: memodule
-        path: "./out/drivers/memkernel/anrwt_memk.ko"
+        path: "./out/drivers/overlay/anrwt_memk.ko"
