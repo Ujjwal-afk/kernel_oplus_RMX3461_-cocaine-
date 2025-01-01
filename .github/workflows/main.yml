@@ -80,4 +80,4 @@ jobs:
       if: always()
       with:
         name: memodule
-        path: "./out/drivers/overlay/anrwt_memk.ko"
+        path: "./out/drivers/overlay/.ko"
