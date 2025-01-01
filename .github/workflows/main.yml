@@ -76,7 +76,7 @@ jobs:
         path: "AnyKernel3/*"
 
     - name: Upload mem module
-      uses: actions/upload-artifact@v4https://github.com/Ujjwal-afk/kernel_oplus_RMX3461_-cocaine-/edit/ice/.github/workflows/main.yml
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: memodule
