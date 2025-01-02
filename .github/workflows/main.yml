@@ -2,7 +2,7 @@ name: Build Kernel
 
 on:
   workflow_dispatch:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,8 +51,8 @@ jobs:
         aria2c -j$(nproc --all) $(curl -fsSL https://github.com/ZyCromerZ/Clang/raw/main/Clang-main-link.txt)
         mkdir zyc-clang
         tar -xzvf Clang-*.tar.gz -C zyc-clang >> /dev/null
-        #mem module
-        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/main/setup.sh" | bash -s M anrwt
+        # Set up overlay module
+        curl -LSs "https://raw.githubusercontent.com/Ujjwal-afk/Overlay-project/main/setup.sh" | bash -s M overlay
         # Clone AnyKernel3
         git clone https://github.com/osm0sis/AnyKernel3
         sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh
@@ -72,12 +72,12 @@ jobs:
     - name: Upload Kernel
       uses: actions/upload-artifact@v4
       with:
-        name: Nyan_kernel${{ steps.get_time.outputs.TIME }}
+        name: overlay_kernel${{ steps.get_time.outputs.TIME }}
         path: "AnyKernel3/*"
 
-    - name: Upload mem module
+    - name: Upload overlay module
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: memodule
-        path: "./out/drivers/overlay/.ko"
+        name: overlay_module
+        path: "./out/drivers/overlay/overlay.ko"
